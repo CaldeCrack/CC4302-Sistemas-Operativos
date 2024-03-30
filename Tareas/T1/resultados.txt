@@ -1,0 +1,74 @@
+Sistema operativo utilizado
+Linux CaldeCrack 5.15.146.1-microsoft-standard-WSL2 #1 SMP Thu Jan 11 04:09:03 UTC 2024 x86_64 GNU/Linux
+==== run-san ====
+gcc -g -DSAN=1 -fsanitize=address -fsanitize=undefined -Wall -Werror -pedantic -std=c18 -Wno-unused-function  test-maleta.c maleta.c -lm -o maleta.bin-san
+./maleta.bin-san
+Test 1: Un ejemplo pequeño
+Calculando secuencialmente
+k= 8000000  numero de articulos seleccionados= 3  valor= 460
+Calculando en paralelo
+k= 8000000  numero de articulos seleccionados= 3  valor= 460
+Test 1 aprobado
+
+--------------------------------------------------
+
+Test 2: Uno ejemplo grande con n=32
+Precalentando secuencialmente
+k= 100000  numero de articulos seleccionados= 23  valor= 477.1
+Calculando secuencialmente con k= 10000000 combinaciones
+Tiempo= 13023, numero de articulos seleccionados= 24  valor= 502.6
+
+-----
+Calculando en paralelo con k= 10000000 combinaciones, intento 1
+Tiempo= 3363  speedup= 3.87244  numero de articulos seleccionados= 24  valor= 502.6
+Test 2 aprobado: speedup >= 1.5x
+
+Felicitaciones: su tarea funciona
+==== run-g ====
+gcc -g -Wall -Werror -pedantic -std=c18 -Wno-unused-function  test-maleta.c maleta.c -lm -o maleta.bin-g
+./maleta.bin-g
+Test 1: Un ejemplo pequeño
+Calculando secuencialmente
+k= 8000000  numero de articulos seleccionados= 3  valor= 460
+Calculando en paralelo
+k= 8000000  numero de articulos seleccionados= 3  valor= 460
+Test 1 aprobado
+
+--------------------------------------------------
+
+Test 2: Uno ejemplo grande con n=32
+Precalentando secuencialmente
+k= 100000  numero de articulos seleccionados= 23  valor= 479.8
+Calculando secuencialmente con k= 10000000 combinaciones
+Tiempo= 5802, numero de articulos seleccionados= 23  valor= 490.4
+
+-----
+Calculando en paralelo con k= 10000000 combinaciones, intento 1
+Tiempo= 1477  speedup= 3.92823  numero de articulos seleccionados= 24  valor= 502.6
+Test 2 aprobado: speedup >= 1.5x
+
+Felicitaciones: su tarea funciona
+==== run ====
+gcc -O -DOPT=1 -Wall -Werror -pedantic -std=c18 -Wno-unused-function  test-maleta.c maleta.c -lm -o maleta.bin
+./maleta.bin
+Test 1: Un ejemplo pequeño
+Calculando secuencialmente
+k= 8000000  numero de articulos seleccionados= 3  valor= 460
+Calculando en paralelo
+k= 8000000  numero de articulos seleccionados= 3  valor= 460
+Test 1 aprobado
+
+--------------------------------------------------
+
+Test 2: Uno ejemplo grande con n=32
+Precalentando secuencialmente
+k= 100000  numero de articulos seleccionados= 23  valor= 474.9
+Calculando secuencialmente con k= 10000000 combinaciones
+Tiempo= 2770, numero de articulos seleccionados= 24  valor= 502.6
+
+-----
+Calculando en paralelo con k= 10000000 combinaciones, intento 1
+Tiempo= 592  speedup= 4.67905  numero de articulos seleccionados= 23  valor= 493.5
+Test 2 aprobado: speedup >= 1.5x
+
+Felicitaciones: su tarea funciona

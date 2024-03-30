@@ -489,3 +489,5 @@ Temporary Items
 .fuse_hidden*
 .directory
 .Trash-*
+
+.vscode/

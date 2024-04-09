@@ -1,0 +1,203 @@
+Sistema operativo utilizado
+Linux CaldeCrack 5.15.146.1-microsoft-standard-WSL2 #1 SMP Thu Jan 11 04:09:03 UTC 2024 x86_64 GNU/Linux
+==== run-san ====
+gcc -g -DSAN=1 -fsanitize=address -fsanitize=undefined -Wall -Werror -pedantic -std=c18 -Wno-unused-function  test-reservar.c reservar.c -lm -o reservar.bin-san
+./reservar.bin-san
+--- Test: un solo vehiculo no espera -------------------------
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+1: renault libera 2 estacionamientos desde 0
+--- Test: se ocupan todos los estacionamientos, pero nadie espera ---
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 5 estacionamientos
+3: chevrolet reserva 5 estacionamiento desde 5
+4: renault libera 2 estacionamientos desde 0
+4: mercedes libera 3 estacionamientos desde 2
+4: chevrolet libera 5 estacionamientos desde 5
+--- Test: se ocupan todos los estacionamientos, ultimo espera ---
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 6 estacionamientos
+4: renault libera 2 estacionamientos desde 0
+4: mercedes libera 3 estacionamientos desde 2
+4: chevrolet reserva 6 estacionamiento desde 0
+5: chevrolet libera 6 estacionamientos desde 0
+--- Test: estacionamientos se otorgan por orden de llegada ----
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 6 estacionamientos
+4: suzuki solicita 1 estacionamientos
+5: renault libera 2 estacionamientos desde 0
+5: mercedes libera 3 estacionamientos desde 2
+5: chevrolet reserva 6 estacionamiento desde 0
+5: suzuki reserva 1 estacionamiento desde 6
+6: suzuki libera 1 estacionamientos desde 6
+6: chevrolet libera 6 estacionamientos desde 0
+--- Test: un test mas completo ----
+1: chevrolet solicita 6 estacionamientos
+1: chevrolet reserva 6 estacionamiento desde 0
+2: toyota solicita 4 estacionamientos
+2: toyota reserva 4 estacionamiento desde 6
+3: renault solicita 2 estacionamientos
+4: mg solicita 2 estacionamientos
+5: toyota libera 4 estacionamientos desde 6
+5: renault reserva 2 estacionamiento desde 6
+5: mg reserva 2 estacionamiento desde 8
+5: suzuki solicita 1 estacionamientos
+6: chevrolet libera 6 estacionamientos desde 0
+6: suzuki reserva 1 estacionamiento desde 0
+6: ford solicita 6 estacionamientos
+7: mercedes solicita 3 estacionamientos
+8: mg libera 2 estacionamientos desde 8
+8: bmw solicita 7 estacionamientos
+9: renault libera 2 estacionamientos desde 6
+9: ford reserva 6 estacionamiento desde 1
+9: mercedes reserva 3 estacionamiento desde 7
+11: suzuki libera 1 estacionamientos desde 0
+11: ford libera 6 estacionamientos desde 1
+11: bmw reserva 7 estacionamiento desde 0
+12: mercedes libera 3 estacionamientos desde 7
+12: bmw libera 7 estacionamientos desde 0
+Test de robustez -------------------------------------
+Felicitaciones: aprobo todos los tests
+==== run-g ====
+gcc -g -Wall -Werror -pedantic -std=c18 -Wno-unused-function  test-reservar.c reservar.c -lm -o reservar.bin-g
+./reservar.bin-g
+--- Test: un solo vehiculo no espera -------------------------
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+1: renault libera 2 estacionamientos desde 0
+--- Test: se ocupan todos los estacionamientos, pero nadie espera ---
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 5 estacionamientos
+3: chevrolet reserva 5 estacionamiento desde 5
+4: renault libera 2 estacionamientos desde 0
+4: mercedes libera 3 estacionamientos desde 2
+4: chevrolet libera 5 estacionamientos desde 5
+--- Test: se ocupan todos los estacionamientos, ultimo espera ---
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 6 estacionamientos
+4: renault libera 2 estacionamientos desde 0
+4: mercedes libera 3 estacionamientos desde 2
+4: chevrolet reserva 6 estacionamiento desde 0
+5: chevrolet libera 6 estacionamientos desde 0
+--- Test: estacionamientos se otorgan por orden de llegada ----
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 6 estacionamientos
+4: suzuki solicita 1 estacionamientos
+5: renault libera 2 estacionamientos desde 0
+5: mercedes libera 3 estacionamientos desde 2
+5: chevrolet reserva 6 estacionamiento desde 0
+5: suzuki reserva 1 estacionamiento desde 6
+6: suzuki libera 1 estacionamientos desde 6
+6: chevrolet libera 6 estacionamientos desde 0
+--- Test: un test mas completo ----
+1: chevrolet solicita 6 estacionamientos
+1: chevrolet reserva 6 estacionamiento desde 0
+2: toyota solicita 4 estacionamientos
+2: toyota reserva 4 estacionamiento desde 6
+3: renault solicita 2 estacionamientos
+4: mg solicita 2 estacionamientos
+5: toyota libera 4 estacionamientos desde 6
+5: renault reserva 2 estacionamiento desde 6
+5: mg reserva 2 estacionamiento desde 8
+5: suzuki solicita 1 estacionamientos
+6: chevrolet libera 6 estacionamientos desde 0
+6: suzuki reserva 1 estacionamiento desde 0
+6: ford solicita 6 estacionamientos
+7: mercedes solicita 3 estacionamientos
+8: mg libera 2 estacionamientos desde 8
+8: bmw solicita 7 estacionamientos
+9: renault libera 2 estacionamientos desde 6
+9: ford reserva 6 estacionamiento desde 1
+9: mercedes reserva 3 estacionamiento desde 7
+11: suzuki libera 1 estacionamientos desde 0
+11: ford libera 6 estacionamientos desde 1
+11: bmw reserva 7 estacionamiento desde 0
+12: mercedes libera 3 estacionamientos desde 7
+12: bmw libera 7 estacionamientos desde 0
+Test de robustez -------------------------------------
+Felicitaciones: aprobo todos los tests
+==== run ====
+gcc -O -DOPT=1 -Wall -Werror -pedantic -std=c18 -Wno-unused-function  test-reservar.c reservar.c -lm -o reservar.bin
+./reservar.bin
+--- Test: un solo vehiculo no espera -------------------------
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+1: renault libera 2 estacionamientos desde 0
+--- Test: se ocupan todos los estacionamientos, pero nadie espera ---
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 5 estacionamientos
+3: chevrolet reserva 5 estacionamiento desde 5
+4: renault libera 2 estacionamientos desde 0
+4: mercedes libera 3 estacionamientos desde 2
+4: chevrolet libera 5 estacionamientos desde 5
+--- Test: se ocupan todos los estacionamientos, ultimo espera ---
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 6 estacionamientos
+4: renault libera 2 estacionamientos desde 0
+4: mercedes libera 3 estacionamientos desde 2
+4: chevrolet reserva 6 estacionamiento desde 0
+5: chevrolet libera 6 estacionamientos desde 0
+--- Test: estacionamientos se otorgan por orden de llegada ----
+1: renault solicita 2 estacionamientos
+1: renault reserva 2 estacionamiento desde 0
+2: mercedes solicita 3 estacionamientos
+2: mercedes reserva 3 estacionamiento desde 2
+3: chevrolet solicita 6 estacionamientos
+4: suzuki solicita 1 estacionamientos
+5: renault libera 2 estacionamientos desde 0
+5: mercedes libera 3 estacionamientos desde 2
+5: chevrolet reserva 6 estacionamiento desde 0
+5: suzuki reserva 1 estacionamiento desde 6
+6: chevrolet libera 6 estacionamientos desde 0
+6: suzuki libera 1 estacionamientos desde 6
+--- Test: un test mas completo ----
+1: chevrolet solicita 6 estacionamientos
+1: chevrolet reserva 6 estacionamiento desde 0
+2: toyota solicita 4 estacionamientos
+2: toyota reserva 4 estacionamiento desde 6
+3: renault solicita 2 estacionamientos
+4: mg solicita 2 estacionamientos
+5: toyota libera 4 estacionamientos desde 6
+5: renault reserva 2 estacionamiento desde 6
+5: mg reserva 2 estacionamiento desde 8
+5: suzuki solicita 1 estacionamientos
+6: chevrolet libera 6 estacionamientos desde 0
+6: suzuki reserva 1 estacionamiento desde 0
+6: ford solicita 6 estacionamientos
+7: mercedes solicita 3 estacionamientos
+8: mg libera 2 estacionamientos desde 8
+8: bmw solicita 7 estacionamientos
+9: renault libera 2 estacionamientos desde 6
+9: ford reserva 6 estacionamiento desde 1
+9: mercedes reserva 3 estacionamiento desde 7
+11: suzuki libera 1 estacionamientos desde 0
+11: ford libera 6 estacionamientos desde 1
+11: bmw reserva 7 estacionamiento desde 0
+12: mercedes libera 3 estacionamientos desde 7
+12: bmw libera 7 estacionamientos desde 0
+Test de robustez -------------------------------------
+Felicitaciones: aprobo todos los tests

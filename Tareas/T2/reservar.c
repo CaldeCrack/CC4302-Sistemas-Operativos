@@ -69,7 +69,6 @@ int reservar(int k) {
 
 void liberar(int e, int k) {
     pthread_mutex_lock(&m);
-    // display++;
     parking_usage(k, e, 0);
     pthread_cond_broadcast(&cond);
     pthread_mutex_unlock(&m);

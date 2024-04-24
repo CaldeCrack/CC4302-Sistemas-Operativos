@@ -1,0 +1,31 @@
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdio.h>
+#include <pthread.h>
+
+#include "disk.h"
+#include "pss.h"
+
+/*****************************************************
+ * Agregue aca los tipos, variables globales u otras
+ * funciones que necesite
+ *****************************************************/
+
+...
+
+void iniDisk(void) {
+  ...
+}
+
+void cleanDisk(void) {
+  ...
+}
+
+void requestDisk(int track) {
+  ...
+}
+
+void releaseDisk() {
+  ...
+}

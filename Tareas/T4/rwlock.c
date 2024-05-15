@@ -8,7 +8,7 @@ int reading = 0;
 struct rwlock {
     int writing;
     NthQueue *writers, *readers;
-  State status;
+    State status;
 };
 
 nRWLock *nMakeRWLock() {

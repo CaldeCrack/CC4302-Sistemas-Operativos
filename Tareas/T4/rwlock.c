@@ -3,10 +3,10 @@
 #include "nKernel/nthread-impl.h"
 #include "rwlock.h"
 
-int reading = 0;
+// int reading = 0;
 
 struct rwlock {
-    int writing;
+    int writing, reading;
     NthQueue *writers, *readers;
     State status;
 };
@@ -14,7 +14,7 @@ struct rwlock {
 nRWLock *nMakeRWLock() {
     NthQueue *r = nth_makeQueue(), *w = nth_makeQueue();
     nRWLock *rwl = nMalloc(sizeof(nRWLock));
-    *rwl = (nRWLock) {0, r, w};
+    *rwl = (nRWLock) {0, 0, r, w};
     return rwl;
 }
 
@@ -26,7 +26,7 @@ int nEnterRead(nRWLock *rwl, int timeout) {
     START_CRITICAL
 
     if(!rwl->writing && nth_emptyQueue(rwl->writers))
-        reading++;
+        rwl->reading++;
     else {
         nThread thisTh = nSelf();
         nth_putBack(rwl->readers, thisTh);
@@ -41,7 +41,7 @@ int nEnterRead(nRWLock *rwl, int timeout) {
 int nEnterWrite(nRWLock *rwl, int timeout) {
     START_CRITICAL
 
-    if(!rwl->writing && !reading)
+    if(!rwl->writing && !rwl->reading)
         rwl->writing = 1;
     else {
         nThread thisTh = nSelf();
@@ -56,9 +56,9 @@ int nEnterWrite(nRWLock *rwl, int timeout) {
 
 void nExitRead(nRWLock *rwl) {
     START_CRITICAL
-    reading--;
+    rwl->reading--;
 
-    if(!reading && !nth_emptyQueue(rwl->writers)) {
+    if(!rwl->reading && !nth_emptyQueue(rwl->writers)) {
         rwl->writing = 1;
         nThread th = nth_getFront(rwl->writers);
         setReady(th);
@@ -74,7 +74,7 @@ void nExitWrite(nRWLock *rwl) {
 
     if(!nth_emptyQueue(rwl->readers)) {
         while(!nth_emptyQueue(rwl->readers)) {
-            reading++;
+            rwl->reading++;
             nThread th = nth_getFront(rwl->readers);
             setReady(th);
         }

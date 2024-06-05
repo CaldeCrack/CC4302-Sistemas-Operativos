@@ -3,8 +3,6 @@
 #include "nKernel/nthread-impl.h"
 #include "rwlock.h"
 
-// int reading = 0;
-
 struct rwlock {
     int writing, reading;
     NthQueue *writers, *readers;

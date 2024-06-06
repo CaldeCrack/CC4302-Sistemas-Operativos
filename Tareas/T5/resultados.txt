@@ -1,0 +1,494 @@
+Sistema operativo utilizado
+Linux CaldeCrack 5.15.146.1-microsoft-standard-WSL2 #1 SMP Thu Jan 11 04:09:03 UTC 2024 x86_64 GNU/Linux
+==== run-san ====
+gcc -g -DSAN=1 -fsanitize=address -fsanitize=undefined -Wall -Werror -pedantic -DNTHREADS -std=c18 -InKernel  test-rwlock.c rwlock.c nKernel/nthread.c nKernel/nutil.c nKernel/ntime.c nKernel/pss.c nKernel/sched-fcfs.c nKernel/sched-rr.c nKernel/sched-pri-1core.c nKernel/sched-fcfs-1core.c nKernel/sem.c nKernel/mutex-cond.c nKernel/nmsgs.c nKernel/nsystem.c -lm -lpthread -lrt -o rwlock.bin-san
+--------------------------------------------
+./rwlock.bin-san
+Info: setting single-core FCFS scheduling
+### Test de timeouts ###########################################
+--- Test: el timeout expira esperando escritor --------
+0: escritor pedro solicita entrar
+0: escritor pedro entra
+10: escritor juan solicita entrar con timeout de 10
+20: escritor juan no pudo entrar
+30: escritor pedro sale
+--- Test: el timeout expire esperando lector ----------
+0: lector pedro solicita entrar
+0: lector pedro entra
+10: escritor juan solicita entrar con timeout de 10
+20: escritor juan no pudo entrar
+30: lector pedro sale
+--- Test: el timeout no expira esperando escritor -----
+0: escritor pedro solicita entrar
+0: escritor pedro entra
+10: escritor juan solicita entrar con timeout de 20
+20: escritor pedro sale
+20: escritor juan entra
+30: escritor juan sale
+--- Test: el timeout no expira esperando lector -------
+0: lector pedro solicita entrar
+0: lector pedro entra
+10: escritor juan solicita entrar con timeout de 20
+20: lector pedro sale
+20: escritor juan entra
+30: escritor juan sale
+--- Test: varios timeouts que expiran y no expiran ----
+0: lector pedro solicita entrar con timeout de 70
+0: lector pedro entra
+10: lector juan solicita entrar con timeout de 80
+10: lector juan entra
+20: escritor diego solicita entrar con timeout de 110
+30: lector ana solicita entrar con timeout de 110
+40: escritor ximena solicita entrar con timeout de 30
+50: escritor carolina solicita entrar con timeout de 60
+60: lector pedro sale
+70: escritor ximena no pudo entrar
+80: lector juan sale
+80: escritor diego entra
+90: escritor jorge solicita entrar con timeout de 10
+100: escritor jorge no pudo entrar
+110: escritor carolina no pudo entrar
+120: escritor diego sale
+120: lector ana entra
+130: lector ana sale
+
+### Los mismos tests de la tarea 4 timeout no expira ##########
+--- Test: un solo lector ------------------------------
+0: lector pedro solicita entrar con timeout de 20000
+0: lector pedro entra
+10: lector pedro sale
+--- Test: un solo escritor ----------------------------
+0: escritor juan solicita entrar con timeout de 20000
+0: escritor juan entra
+10: escritor juan sale
+--- Test: lectores en paralelo ------------------------
+0: lector pedro solicita entrar con timeout de 20000
+0: lector pedro entra
+10: lector juan solicita entrar con timeout de 20000
+10: lector juan entra
+20: lector pedro sale
+30: lector juan sale
+--- Test: escritores secuenciales ---------------------
+0: escritor pedro solicita entrar con timeout de 20000
+0: escritor pedro entra
+10: escritor juan solicita entrar con timeout de 20000
+20: escritor pedro sale
+20: escritor juan entra
+30: escritor juan sale
+--- Test: escritores paralelos en rwlocks distintos ---
+0: escritor pedro solicita entrar con timeout de 20000
+0: escritor pedro entra
+10: escritor juan solicita entrar con timeout de 20000
+10: escritor juan entra
+20: escritor pedro sale
+20: escritor juan sale
+--- Test: escritor espera a que salga ultimo lector ---
+0: lector ana solicita entrar con timeout de 20000
+0: lector ana entra
+10: lector tomas solicita entrar con timeout de 20000
+10: lector tomas entra
+20: lector ximena solicita entrar con timeout de 20000
+20: lector ximena entra
+30: escritor jorge solicita entrar con timeout de 20000
+40: lector ana sale
+50: lector ximena sale
+60: lector tomas sale
+60: escritor jorge entra
+70: escritor jorge sale
+--- Test: lector espera si llega despues de escritor --
+0: lector ana solicita entrar con timeout de 20000
+0: lector ana entra
+10: lector tomas solicita entrar con timeout de 20000
+10: lector tomas entra
+20: escritor ximena solicita entrar con timeout de 20000
+30: lector jorge solicita entrar con timeout de 20000
+40: lector tomas sale
+50: lector ana sale
+50: escritor ximena entra
+60: escritor ximena sale
+60: lector jorge entra
+70: lector jorge sale
+--- Test: entradas alternadas -------------------------
+0: lector ana solicita entrar con timeout de 20000
+0: lector ana entra
+10: escritor tomas solicita entrar con timeout de 20000
+20: escritor ximena solicita entrar con timeout de 20000
+30: escritor jorge solicita entrar con timeout de 20000
+40: escritor veronica solicita entrar con timeout de 20000
+50: lector alberto solicita entrar con timeout de 20000
+60: lector julio solicita entrar con timeout de 20000
+70: lector ana sale
+70: escritor tomas entra
+80: escritor tomas sale
+80: lector alberto entra
+80: lector julio entra
+90: lector carolina solicita entrar con timeout de 20000
+100: lector alberto sale
+110: lector julio sale
+110: escritor ximena entra
+120: escritor ximena sale
+120: lector carolina entra
+130: lector carolina sale
+130: escritor jorge entra
+140: escritor jorge sale
+140: escritor veronica entra
+150: escritor veronica sale
+
+### Los mismos tests de la tarea 4 sin timeout ################
+--- Test: un solo lector ------------------------------
+0: lector pedro solicita entrar
+0: lector pedro entra
+10: lector pedro sale
+--- Test: un solo escritor ----------------------------
+0: escritor juan solicita entrar
+0: escritor juan entra
+10: escritor juan sale
+--- Test: lectores en paralelo ------------------------
+0: lector pedro solicita entrar
+0: lector pedro entra
+10: lector juan solicita entrar
+10: lector juan entra
+20: lector pedro sale
+30: lector juan sale
+--- Test: escritores secuenciales ---------------------
+0: escritor pedro solicita entrar
+0: escritor pedro entra
+10: escritor juan solicita entrar
+20: escritor pedro sale
+20: escritor juan entra
+30: escritor juan sale
+--- Test: escritores paralelos en rwlocks distintos ---
+0: escritor pedro solicita entrar
+0: escritor pedro entra
+10: escritor juan solicita entrar
+10: escritor juan entra
+20: escritor pedro sale
+20: escritor juan sale
+--- Test: escritor espera a que salga ultimo lector ---
+0: lector ana solicita entrar
+0: lector ana entra
+10: lector tomas solicita entrar
+10: lector tomas entra
+20: lector ximena solicita entrar
+20: lector ximena entra
+30: escritor jorge solicita entrar
+40: lector ana sale
+50: lector ximena sale
+60: lector tomas sale
+60: escritor jorge entra
+70: escritor jorge sale
+--- Test: lector espera si llega despues de escritor --
+0: lector ana solicita entrar
+0: lector ana entra
+10: lector tomas solicita entrar
+10: lector tomas entra
+20: escritor ximena solicita entrar
+30: lector jorge solicita entrar
+40: lector tomas sale
+50: lector ana sale
+50: escritor ximena entra
+60: escritor ximena sale
+60: lector jorge entra
+70: lector jorge sale
+--- Test: entradas alternadas -------------------------
+0: lector ana solicita entrar
+0: lector ana entra
+10: escritor tomas solicita entrar
+20: escritor ximena solicita entrar
+30: escritor jorge solicita entrar
+40: escritor veronica solicita entrar
+50: lector alberto solicita entrar
+60: lector julio solicita entrar
+70: lector ana sale
+70: escritor tomas entra
+80: escritor tomas sale
+80: lector alberto entra
+80: lector julio entra
+90: lector carolina solicita entrar
+100: lector alberto sale
+110: lector julio sale
+110: escritor ximena entra
+120: escritor ximena sale
+120: lector carolina entra
+130: lector carolina sale
+130: escritor jorge entra
+140: escritor jorge sale
+140: escritor veronica entra
+150: escritor veronica sale
+Felicitaciones: Aprobo los tests
+Info: Number of cores = 1
+Info: total context changes = 240
+Info: Implicit context changes = 0
+--------------------------------------------
+./rwlock.bin-san 1
+Info: setting single-core FCFS scheduling
+
+### Test de esfuerzo con timeout que no expira ################
+ELLLELLLLLLEELLELEELEELEELEEELEEEELLEEELELLLEELEEELLELELLLELELELEELLLEEELLLLELLEELLLEEELELLLLEELLEEELEEEEEEELLEELELELEEEELELELLELLLEELLLELLELELEELEELELLLLEEEELLELLELLEELEELEELEEEEELLEEEELLLEELLLELLLLEELLLLELELLLEEEEEEEEEELEELELELLLEELEELLLLEEELLLLLEELLLLLELEEEELLLEELLLLLELELEEEELEEELELELLEEELLELELEELLEEEEELELELELEELELLEEELLLLELLEELELLEEEELELLELELLLLLLLLELLLLLELLLELLEEEELLLELLLLEELLLLEEELEELELELEEEEEEEELLLEELELELLLLLLLLLLLEELLELLLLLLLELELLELELELLLLELELLEEELLELELELEEEEEEEEELEEELLLELEEELLLEELELLELLEELLLLLLEEELEELELLLLLLLEELLEELELEELEELLLELEEELLLLLELELLLELEEEEEEELEELLLELLLLLELELEELLEEELLLELLLLELLLELLLEEELLELLLELEEELELELELEEELELEELELELELEELLLLEELELEELELEELLELLLLLLLLLEEEEELLLELLELELLELLELLLEEEEEELLLLELLLELEELEELLEEEEEELEEEEEEEELLLEEELLEELLLLELELLEELEELLLLLLELELELLLEEEELLLLELLEEELLLELLELEEELELEEELLLLELEEELLLELELLLEELLLELLEELLEEEELEEELELELLLLELEEEEEELLEELLEEEEELLEEELEEELEEEELLEEELEEEELELELLELLLELLLLELELLLEELEELEEELLLEEEELLLELELLEELLELELLLLELLLLEEELEEELELEEEEELLEELELELELELLLELLLLELELELELLLLEEEL
+
+### Test de esfuerzo sin timeout ##############################
+ELEELLLLEELELLLELLEELEEELELLLLEELELEELELEEEEEELELLEELLEELELELLELLLLLEEELLEELLELLELEELELELEEEELEEEELEEEEEEEEELEELLLLLELEEEELELELEELELELEELLLLELEELLLEEELLEEEEELELELLEELLEELEEEEEEELELEEELEEEEEELEEEELEEELELLELLEEELLLELLEEEEEELLEELLELEELLLEELELLLLLLEEEELLLLELELELLLLLLLEELLLLLELEEELEELLLLELLELEEELLEEELEELLLELLEELLLELELELLEEELEELEEEELELELELLLLLLLLLLEEEELELLLLLEELEELELLELLELELEELEELELLLLELLEEEEEEEELEEELLEELLELLEEELLEELELLLLELLLLLELLLLELEEEELLLEEEELLELEELLELEEEELLEELEELEEEEEELEEEEELLLLLLLELLEELELLLELELLELEELELLLELEEELELLLLEELLEELEELLEELLLEEELLELELLLLEELLLLLLEEELEELLELEEEEEELELLLEEELELELEELLELLELLLLLLELLELELELLEEEELELLELLELLLLLLLELELLLLLELELEEELLLEELLELELLELLEEEEEEEEELELELLLELEEELEEEEELELLLELEELLELEEELLELEEEEEEELLEELELLLLEELELLEEEEELEELLLLLELLLEELLLEEELLELLLELLEEEELELLEELEEELELLLLEELEEELELELLELLLLEEELLLLEELELEEELEELELEELLLEELEEELLEEELELLEEEEEEEELEEELEELLLLELELLLLELLEELLEELLEELEEEEEEEEELEEEELEELEEELELLLELLELLLLEEELEELLLLELLLLELELELEELLLLLEELLLELLLELLELEEEEEELEEELEEELEEELELELELELEEELLLELELELLLELLE
+Felicitaciones: Aprobo los tests
+Info: Number of cores = 1
+Info: total context changes = 101000
+Info: Implicit context changes = 0
+==== run-g ====
+gcc -g -Wall -Werror -pedantic -DNTHREADS -std=c18 -InKernel  test-rwlock.c rwlock.c nKernel/nthread.c nKernel/nutil.c nKernel/ntime.c nKernel/pss.c nKernel/sched-fcfs.c nKernel/sched-rr.c nKernel/sched-pri-1core.c nKernel/sched-fcfs-1core.c nKernel/sem.c nKernel/mutex-cond.c nKernel/nmsgs.c nKernel/nsystem.c -lm -lpthread -lrt -o rwlock.bin-g
+--------------------------------------------
+./rwlock.bin-g
+Info: setting single-core FCFS scheduling
+### Test de timeouts ###########################################
+--- Test: el timeout expira esperando escritor --------
+0: escritor pedro solicita entrar
+0: escritor pedro entra
+10: escritor juan solicita entrar con timeout de 10
+20: escritor juan no pudo entrar
+30: escritor pedro sale
+--- Test: el timeout expire esperando lector ----------
+0: lector pedro solicita entrar
+0: lector pedro entra
+10: escritor juan solicita entrar con timeout de 10
+20: escritor juan no pudo entrar
+30: lector pedro sale
+--- Test: el timeout no expira esperando escritor -----
+0: escritor pedro solicita entrar
+0: escritor pedro entra
+10: escritor juan solicita entrar con timeout de 20
+20: escritor pedro sale
+20: escritor juan entra
+30: escritor juan sale
+--- Test: el timeout no expira esperando lector -------
+0: lector pedro solicita entrar
+0: lector pedro entra
+10: escritor juan solicita entrar con timeout de 20
+20: lector pedro sale
+20: escritor juan entra
+30: escritor juan sale
+--- Test: varios timeouts que expiran y no expiran ----
+0: lector pedro solicita entrar con timeout de 70
+0: lector pedro entra
+10: lector juan solicita entrar con timeout de 80
+10: lector juan entra
+20: escritor diego solicita entrar con timeout de 110
+30: lector ana solicita entrar con timeout de 110
+40: escritor ximena solicita entrar con timeout de 30
+50: escritor carolina solicita entrar con timeout de 60
+60: lector pedro sale
+70: escritor ximena no pudo entrar
+80: lector juan sale
+80: escritor diego entra
+90: escritor jorge solicita entrar con timeout de 10
+100: escritor jorge no pudo entrar
+110: escritor carolina no pudo entrar
+120: escritor diego sale
+120: lector ana entra
+130: lector ana sale
+
+### Los mismos tests de la tarea 4 timeout no expira ##########
+--- Test: un solo lector ------------------------------
+0: lector pedro solicita entrar con timeout de 20000
+0: lector pedro entra
+10: lector pedro sale
+--- Test: un solo escritor ----------------------------
+0: escritor juan solicita entrar con timeout de 20000
+0: escritor juan entra
+10: escritor juan sale
+--- Test: lectores en paralelo ------------------------
+0: lector pedro solicita entrar con timeout de 20000
+0: lector pedro entra
+10: lector juan solicita entrar con timeout de 20000
+10: lector juan entra
+20: lector pedro sale
+30: lector juan sale
+--- Test: escritores secuenciales ---------------------
+0: escritor pedro solicita entrar con timeout de 20000
+0: escritor pedro entra
+10: escritor juan solicita entrar con timeout de 20000
+20: escritor pedro sale
+20: escritor juan entra
+30: escritor juan sale
+--- Test: escritores paralelos en rwlocks distintos ---
+0: escritor pedro solicita entrar con timeout de 20000
+0: escritor pedro entra
+10: escritor juan solicita entrar con timeout de 20000
+10: escritor juan entra
+20: escritor pedro sale
+20: escritor juan sale
+--- Test: escritor espera a que salga ultimo lector ---
+0: lector ana solicita entrar con timeout de 20000
+0: lector ana entra
+10: lector tomas solicita entrar con timeout de 20000
+10: lector tomas entra
+20: lector ximena solicita entrar con timeout de 20000
+20: lector ximena entra
+30: escritor jorge solicita entrar con timeout de 20000
+40: lector ana sale
+50: lector ximena sale
+60: lector tomas sale
+60: escritor jorge entra
+70: escritor jorge sale
+--- Test: lector espera si llega despues de escritor --
+0: lector ana solicita entrar con timeout de 20000
+0: lector ana entra
+10: lector tomas solicita entrar con timeout de 20000
+10: lector tomas entra
+20: escritor ximena solicita entrar con timeout de 20000
+30: lector jorge solicita entrar con timeout de 20000
+40: lector tomas sale
+50: lector ana sale
+50: escritor ximena entra
+60: escritor ximena sale
+60: lector jorge entra
+70: lector jorge sale
+--- Test: entradas alternadas -------------------------
+0: lector ana solicita entrar con timeout de 20000
+0: lector ana entra
+10: escritor tomas solicita entrar con timeout de 20000
+20: escritor ximena solicita entrar con timeout de 20000
+30: escritor jorge solicita entrar con timeout de 20000
+40: escritor veronica solicita entrar con timeout de 20000
+50: lector alberto solicita entrar con timeout de 20000
+60: lector julio solicita entrar con timeout de 20000
+70: lector ana sale
+70: escritor tomas entra
+80: escritor tomas sale
+80: lector alberto entra
+80: lector julio entra
+90: lector carolina solicita entrar con timeout de 20000
+100: lector alberto sale
+110: lector julio sale
+110: escritor ximena entra
+120: escritor ximena sale
+120: lector carolina entra
+130: lector carolina sale
+130: escritor jorge entra
+140: escritor jorge sale
+140: escritor veronica entra
+150: escritor veronica sale
+
+### Los mismos tests de la tarea 4 sin timeout ################
+--- Test: un solo lector ------------------------------
+0: lector pedro solicita entrar
+0: lector pedro entra
+10: lector pedro sale
+--- Test: un solo escritor ----------------------------
+0: escritor juan solicita entrar
+0: escritor juan entra
+10: escritor juan sale
+--- Test: lectores en paralelo ------------------------
+0: lector pedro solicita entrar
+0: lector pedro entra
+10: lector juan solicita entrar
+10: lector juan entra
+20: lector pedro sale
+30: lector juan sale
+--- Test: escritores secuenciales ---------------------
+0: escritor pedro solicita entrar
+0: escritor pedro entra
+10: escritor juan solicita entrar
+20: escritor pedro sale
+20: escritor juan entra
+30: escritor juan sale
+--- Test: escritores paralelos en rwlocks distintos ---
+0: escritor pedro solicita entrar
+0: escritor pedro entra
+10: escritor juan solicita entrar
+10: escritor juan entra
+20: escritor pedro sale
+20: escritor juan sale
+--- Test: escritor espera a que salga ultimo lector ---
+0: lector ana solicita entrar
+0: lector ana entra
+10: lector tomas solicita entrar
+10: lector tomas entra
+20: lector ximena solicita entrar
+20: lector ximena entra
+30: escritor jorge solicita entrar
+40: lector ana sale
+50: lector ximena sale
+60: lector tomas sale
+60: escritor jorge entra
+70: escritor jorge sale
+--- Test: lector espera si llega despues de escritor --
+0: lector ana solicita entrar
+0: lector ana entra
+10: lector tomas solicita entrar
+10: lector tomas entra
+20: escritor ximena solicita entrar
+30: lector jorge solicita entrar
+40: lector tomas sale
+50: lector ana sale
+50: escritor ximena entra
+60: escritor ximena sale
+60: lector jorge entra
+70: lector jorge sale
+--- Test: entradas alternadas -------------------------
+0: lector ana solicita entrar
+0: lector ana entra
+10: escritor tomas solicita entrar
+20: escritor ximena solicita entrar
+30: escritor jorge solicita entrar
+40: escritor veronica solicita entrar
+50: lector alberto solicita entrar
+60: lector julio solicita entrar
+70: lector ana sale
+70: escritor tomas entra
+80: escritor tomas sale
+80: lector alberto entra
+80: lector julio entra
+90: lector carolina solicita entrar
+100: lector alberto sale
+110: lector julio sale
+110: escritor ximena entra
+120: escritor ximena sale
+120: lector carolina entra
+130: lector carolina sale
+130: escritor jorge entra
+140: escritor jorge sale
+140: escritor veronica entra
+150: escritor veronica sale
+Felicitaciones: Aprobo los tests
+Info: Number of cores = 1
+Info: total context changes = 239
+Info: Implicit context changes = 0
+--------------------------------------------
+./rwlock.bin-g -slice 1 -ncores 4 1
+Info: setting 4-core round robin scheduling
+
+### Test de esfuerzo con timeout que no expira ################
+ELLLELLLLLLEELLELEELEELEELEEELEEEELLEEELELLLEELEEELLELELLLELELELEELLLEEELLLLELLEELLLEEELELLLLEELLEEELEEEEEEELLEELELELEEEELELELLELLLEELLLELLELELEELEELELLLLEEEELLELLELLEELEELEELEEEEELLEEEELLLEELLLELLLLEELLLLELELLLEEEEEEEEEELEELELELLLEELEELLLLEEELLLLLEELLLLLELEEEELLLEELLLLLELELEEEELEEELELELLEEELLELELEELLEEEEELELELELEELELLEEELLLLELLEELELLEEEELELLELELLLLLLLLELLLLLELLLELLEEEELLLELLLLEELLLLEEELEELELELEEEEEEEELLLEELELELLLLLLLLLLLEELLELLLLLLLELELLELELELLLLELELLEEELLELELELEEEEEEEEELEEELLLELEEELLLEELELLELLEELLLLLLEEELEELELLLLLLLEELLEELELEELEELLLELEEELLLLLELELLLELEEEEEEELEELLLELLLLLELELEELLEEELLLELLLLELLLELLLEEELLELLLELEEELELELELEEELELEELELELELEELLLLEELELEELELEELLELLLLLLLLLEEEEELLLELLELELLELLELLLEEEEEELLLLELLLELEELEELLEEEEEELEEEEEEEELLLEEELLEELLLLELELLEELEELLLLLLELELELLLEEEELLLLELLEEELLLELLELEEELELEEELLLLELEEELLLELELLLEELLLELLEELLEEEELEEELELELLLLELEEEEEELLEELLEEEEELLEEELEEELEEEELLEEELEEEELELELLELLLELLLLELELLLEELEELEEELLLEEEELLLELELLEELLELELLLLELLLLEEELEEELELEEEEELLEELELELELELLLELLLLELELELELLLLEEEL
+
+### Test de esfuerzo sin timeout ##############################
+ELEELLLLEELELLLELLEELEEELELLLLEELELEELELEEEEEELELLEELLEELELELLELLLLLEEELLEELLELLELEELELELEEEELEEEELEEEEEEEEELEELLLLLELEEEELELELEELELELEELLLLELEELLLEEELLEEEEELELELLEELLEELEEEEEEELELEEELEEEEEELEEEELEEELELLELLEEELLLELLEEEEEELLEELLELEELLLEELELLLLLLEEEELLLLELELELLLLLLLEELLLLLELEEELEELLLLELLELEEELLEEELEELLLELLEELLLELELELLEEELEELEEEELELELELLLLLLLLLLEEEELELLLLLEELEELELLELLELELEELEELELLLLELLEEEEEEEELEEELLEELLELLEEELLEELELLLLELLLLLELLLLELEEEELLLEEEELLELEELLELEEEELLEELEELEEEEEELEEEEELLLLLLLELLEELELLLELELLELEELELLLELEEELELLLLEELLEELEELLEELLLEEELLELELLLLEELLLLLLEEELEELLELEEEEEELELLLEEELELELEELLELLELLLLLLELLELELELLEEEELELLELLELLLLLLLELELLLLLELELEEELLLEELLELELLELLEEEEEEEEELELELLLELEEELEEEEELELLLELEELLELEEELLELEEEEEEELLEELELLLLEELELLEEEEELEELLLLLELLLEELLLEEELLELLLELLEEEELELLEELEEELELLLLEELEEELELELLELLLLEEELLLLEELELEEELEELELEELLLEELEEELLEEELELLEEEEEEEELEEELEELLLLELELLLLELLEELLEELLEELEEEEEEEEELEEEELEELEEELELLLELLELLLLEEELEELLLLELLLLELELELEELLLLLEELLLELLLELLELEEEEEELEEELEEELEEELELELELELEEELLLELELELLLELLE
+Felicitaciones: Aprobo los tests
+Info: Number of cores = 4
+Info: total context changes = 241785
+Info: Implicit context changes = 25
+==== run ====
+gcc -g -O -DOPT=1 -Wall -Werror -pedantic -DNTHREADS -std=c18 -InKernel  test-rwlock.c rwlock.c nKernel/nthread.c nKernel/nutil.c nKernel/ntime.c nKernel/pss.c nKernel/sched-fcfs.c nKernel/sched-rr.c nKernel/sched-pri-1core.c nKernel/sched-fcfs-1core.c nKernel/sem.c nKernel/mutex-cond.c nKernel/nmsgs.c nKernel/nsystem.c -lm -lpthread -lrt -o rwlock.bin
+--------------------------------------------
+./rwlock.bin -ncores 4 1
+Info: setting 4-core FCFS scheduling
+
+### Test de esfuerzo con timeout que no expira ################
+LLLLELEELELELEELEEEELELLEELLEELLLELLELLEELEELLEELLELLLLELELLEEELELLLELEEEELLELEELELEELELLELLELLLLLELEELLLEELEEEELLELLLELLEELLLLLELLEELEEELEELELELEELLELELLLEELLLEEEEEEEEEEELELELELLELEEEELEEEELLLLLELLLEELEEELLEEELELEEEEELLLLLELLLEELELLLLELLLLLLELEEEEEEEEEEEELLLLELEELEEELEEELLLEEEELELEELLLLLLELLLELELLLLEEEELLELEEEEELLELLLELELLLLLEEEELLLLLLLEELELELLELLLLELEELLELLLEEELELELELEEELEEELEELELLLLELLELLLLLLELLLEEEEELELLLLLLLLLLEEEELELLELLLLLELLLELLLEELELLEEELLLLEELLELLEEEEELLEEEELLELLELELELLELELLLLEEEEEELEELLLEEEELLLELEELELLLEEEEEELELEEEEELLEEEEEELELEEELELLELLLELLLELELEELELEEELLEEELELELLELELLEELELLEELEELLLEEELELEELEELLLLELLEELLELELELLEELEELLEELELEEELEEELLELLLLLLLEELLELLLLLLELLEELLEELLEEELELELLEELELLELEELEELLELLELLLLLEELELLLELELLLEELELLEELEELEEEELELLELLLLLEEELLLELLEELEELLLLLLELLELELLELLELELLLELLEEELLEE
+
+### Test de esfuerzo sin timeout ##############################
+EELELLLEEEELELLELLLLEEELEELELLELLLELLEELELEEELLELEELELLLEEEEEEEEEELLLEEELLEELLLELELELLLLLELEELEELELEEEELELLEEEEELELELLLLELELLEELLLEELELLLEELLEELELLLEEEEEELELELEEEELELLLLLLLLLLELELEELLEEELEEELLELELLLLLLELLEELLLLLLLELEEELLEEELLELELEELLLLLLEEELLLEEEEELELELELELLELEELLLEELELEELLEEELLEEELLLEELLLELEEEEEELLLLLLELEELLELLELELLEEEELLELLLLEEELEEELELLEEEELEEEELLELLLLEELEELLELELLLEEEEEEEELLELEEELLEELLEELEELELEELELEEELELLEEELEEELEEELLLLEEEEEEEELEEELELEELLLLLEEELELLLLELEELEELLLEEELLELELLEEELELELEELEELLLLLELLLELLLEEELLELLLEEELLLLEELELELEEEELLLLLLLLLELLLLLEELELLEELEEEEEELLLEELLELLELLLEELLLELLELLLELLEEELELLELEELELLLLEELLLELLELLELLELELLLLELELELEELLELEEELEEEELELELEEEELLEEEELELLELEEELLELELLEEELLLLLELLLEEELELELLELEEELLELEELEEELELLEEEELELELELLLLELLELLELEELELELELLLLLLEEEEELLLEEELELEELLELLLLELLLLELELEELLLLLEEEELLEL
+Felicitaciones: Aprobo los tests
+Info: Number of cores = 4
+Info: total context changes = 1690087
+Info: Implicit context changes = 0
+--------------------------------------------
+./rwlock.bin -slice 1 -ncores 4 1
+Info: setting 4-core round robin scheduling
+
+### Test de esfuerzo con timeout que no expira ################
+LLLLELEELELELEELEEEELELLEELLEELLLELLELLEELEELLEELLELLLLELELLEEELELLLELEEEELLELEELELEELELLELLELLLLLELEELLLEELEEEELLELLLELLEELLLLLELLEELEEELEELELELEELLELELLLEELLLEEEEEEEEEEELELELELLELEEEELEEEELLLLLELLLEELEEELLEEELELEEEEELLLLLELLLEELELLLLELLLLLLELEEEEEEEEEEEELLLLELEELEEELEEELLLEEEELELEELLLLLLELLLELELLLLEEEELLELEEEEELLELLLELELLLLLEEEELLLLLLLEELELELLELLLLELEELLELLLEEELELELELEEELEEELEELELLLLELLELLLLLLELLLEEEEELELLLLLLLLLLEEEELELLELLLLLELLLELLLEELELLEEELLLLEELLELLEEEEELLEEEELLELLELELELLELELLLLEEEEEELEELLLEEEELLLELEELELLLEEEEEELELEEEEELLEEEEEELELEEELELLELLLELLLELELEELELEEELLEEELELELLELELLEELELLEELEELLLEEELELEELEELLLLELLEELLELELELLEELEELLEELELEEELEEELLELLLLLLLEELLELLLLLLELLEELLEELLEEELELELLEELELLELEELEELLELLELLLLLEELELLLELELLLEELELLEELEELEEEELELLELLLLLEEELLLELLEELEELLLLLLELLELELLELLELELLLELLEEELLEE
+
+### Test de esfuerzo sin timeout ##############################
+EELELLLEEEELELLELLLLEEELEELELLELLLELLEELELEEELLELEELELLLEEEEEEEEEELLLEEELLEELLLELELELLLLLELEELEELELEEEELELLEEEEELELELLLLELELLEELLLEELELLLEELLEELELLLEEEEEELELELEEEELELLLLLLLLLLELELEELLEEELEEELLELELLLLLLELLEELLLLLLLELEEELLEEELLELELEELLLLLLEEELLLEEEEELELELELELLELEELLLEELELEELLEEELLEEELLLEELLLELEEEEEELLLLLLELEELLELLELELLEEEELLELLLLEEELEEELELLEEEELEEEELLELLLLEELEELLELELLLEEEEEEEELLELEEELLEELLEELEELELEELELEEELELLEEELEEELEEELLLLEEEEEEEELEEELELEELLLLLEEELELLLLELEELEELLLEEELLELELLEEELELELEELEELLLLLELLLELLLEEELLELLLEEELLLLEELELELEEEELLLLLLLLLELLLLLEELELLEELEEEEEELLLEELLELLELLLEELLLELLELLLELLEEELELLELEELELLLLEELLLELLELLELLELELLLLELELELEELLELEEELEEEELELELEEEELLEEEELELLELEEELLELELLEEELLLLLELLLEEELELELLELEEELLELEELEEELELLEEEELELELELLLLELLELLELEELELELELLLLLLEEEEELLLEEELELEELLELLLLELLLLELELEELLLLLEEEELLEL
+Felicitaciones: Aprobo los tests
+Info: Number of cores = 4
+Info: total context changes = 1977544
+Info: Implicit context changes = 74

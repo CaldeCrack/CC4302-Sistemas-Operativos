@@ -15,7 +15,6 @@ char *globalVendedor, *globalComprador;
 enum {RECHAZADO = 0, ADJUDICADO = 1, PENDIENTE = 2};
 
 int vendo(int precio, char *vendedor, char *comprador) {
-  // printf("vendo\n");
   spinLock(&mutex);
   int state = PENDIENTE;
 
@@ -49,10 +48,8 @@ int compro(char *comprador, char *vendedor) {
   }
   int precio = bestPrice;
 
-  // printf("antes strcpy\n");
   strcpy(vendedor, globalVendedor);
   strcpy(globalComprador, comprador);
-  // printf("despues strcpy\n");
 
   *globalState = ADJUDICADO;
   spinUnlock(globalWait);

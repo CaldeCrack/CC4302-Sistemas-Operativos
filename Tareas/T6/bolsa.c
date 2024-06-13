@@ -8,11 +8,57 @@
 #include "spinlocks.h"
 
 // Declare aca sus variables globales
+int mutex = OPEN;
+int bestPrice = 0;
+int *globalState, *globalWait;
+char *globalVendedor, *globalComprador;
+enum {RECHAZADO = 0, ADJUDICADO = 1, PENDIENTE = 2};
 
 int vendo(int precio, char *vendedor, char *comprador) {
-  ...
+  // printf("vendo\n");
+  spinLock(&mutex);
+  int state = PENDIENTE;
+
+  if(bestPrice != 0 && bestPrice <= precio) {
+    state = RECHAZADO;
+  } else {
+    if(bestPrice != 0) {
+      *globalState = RECHAZADO;
+      spinUnlock(globalWait);
+    }
+    int w = CLOSED;
+    globalVendedor = vendedor;
+    globalComprador = comprador;
+    globalState = &state;
+    globalWait = &w;
+    bestPrice = precio;
+    spinUnlock(&mutex);
+    spinLock(&w);
+    return state;
+  }
+
+  spinUnlock(&mutex);
+  return state;
 }
 
 int compro(char *comprador, char *vendedor) {
-  ...
+  spinLock(&mutex);
+  if(bestPrice == 0) {
+    spinUnlock(&mutex);
+    return 0;
+  }
+  int precio = bestPrice;
+
+  // printf("antes strcpy\n");
+  strcpy(vendedor, globalVendedor);
+  strcpy(globalComprador, comprador);
+  // printf("despues strcpy\n");
+
+  *globalState = ADJUDICADO;
+  spinUnlock(globalWait);
+
+  bestPrice = 0;
+
+  spinUnlock(&mutex);
+  return precio;
 }

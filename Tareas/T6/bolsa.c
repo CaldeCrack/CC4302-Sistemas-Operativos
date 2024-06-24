@@ -18,10 +18,10 @@ int vendo(int precio, char *vendedor, char *comprador) {
   spinLock(&mutex);
   int state = PENDIENTE;
 
-  if(bestPrice != 0 && bestPrice <= precio) {
+  if(bestPrice && bestPrice <= precio)
     state = RECHAZADO;
-  } else {
-    if(bestPrice != 0) {
+  else {
+    if(bestPrice) {
       *globalState = RECHAZADO;
       spinUnlock(globalWait);
     }
@@ -42,7 +42,7 @@ int vendo(int precio, char *vendedor, char *comprador) {
 
 int compro(char *comprador, char *vendedor) {
   spinLock(&mutex);
-  if(bestPrice == 0) {
+  if(!bestPrice) {
     spinUnlock(&mutex);
     return 0;
   }
